@@ -1,3 +1,17 @@
+
+Hello, I am Michael R.  
+
+	I have created this website to demonstrate my ability to work with front-end programming.  
+This website is a simple one-page design that serves as a light representation of my resume and skills.  
+I apologize if something isn’t perfect, and please feel free to reach out with any feedback or suggestions.
+
+	I used one of the beautiful themes from Strata by HTML5 UP, and I want to give full credit and express my gratitude to them for providing such a great resource.  
+This is my first attempt at creating a website, and I hope you enjoy it!  
+
+
+---
+
+
 Strata by HTML5 UP
 html5up.net | @ajlkn
 Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
@@ -30,4 +44,5 @@ Credits:
 
 	Other:
 		jQuery (jquery.com)
+
 		Responsive Tools (github.com/ajlkn/responsive-tools)
