@@ -122,16 +122,6 @@
 										<h3 class="icon solid fa-envelope"><span class="label">Email</span></h3>
 										<a href="#" id="copyEmail">MichaelRedozubov@gmail.com</a>
 									</li>
-									<script>
-										  document.getElementById("copyEmail").addEventListener("click", function(event) {
-										    event.preventDefault(); // stop link navigation
-										    navigator.clipboard.writeText("MichaelRedozubov@gmail.com").then(() => {
-										      alert("Email copied to clipboard!");
-										    }).catch(err => {
-										      console.error("Failed to copy: ", err);
-										    });
-										  });
-									</script>
 								</ul>
 							</div>
 						</div>
@@ -465,6 +455,16 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
 						<li><a href="https://github.com/Mredozubov" class="icon brands fa-github"><span class="label">Github</span></a></li>
 						<!-- <li><a href="#" class="icon brands fa-dribbble"><span class="label">Dribbble</span></a></li> -->
 						<li><a href="#" id="copyEmail" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
+						<script>
+							  document.getElementById("copyEmail").addEventListener("click", function(event) {
+								event.preventDefault(); // stop link navigation
+								navigator.clipboard.writeText("MichaelRedozubov@gmail.com").then(() => {
+								  alert("Email copied to clipboard!");
+								}).catch(err => {
+								  console.error("Failed to copy: ", err);
+								});
+							  });
+						</script>
 					</ul>
 					<ul class="copyright">
 						<li>&copy; Untitled</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
