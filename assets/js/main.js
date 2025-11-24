@@ -123,8 +123,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const minYear = 2022;
     const maxYear = 2026;
 
-    const header = document.querySelector("#one .timeline-header");
-    const bars   = document.querySelectorAll("#one .timeline-bar");
+    const header = document.querySelector("#two .timeline-header");
+	const bars = document.querySelectorAll("#two .timeline-bar");
+
 
     if (!header || bars.length === 0) {
         // Timeline not on this page, bail out quietly
@@ -175,5 +176,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // Smooth scroll for anchor links
     document.documentElement.style.scrollBehavior = "smooth";
 });
+
 
 
