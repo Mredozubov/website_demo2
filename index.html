@@ -574,61 +574,64 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
 			<script>
-			document.addEventListener("DOMContentLoaded", function () {
-			    const minYear = 2022;
-			    const maxYear = 2026;
-			
-			    const header = document.querySelector("#one .timeline-header");
-			    const bars = document.querySelectorAll("#one .timeline-bar");
-			
-			    function positionBars() {
-			        if (!header) return;
-			
-			        const headerRect = header.getBoundingClientRect();
-			        const headerWidth = headerRect.width;
-			
-			        bars.forEach(bar => {
-			            const start = parseFloat(bar.dataset.start);
-			            const end = parseFloat(bar.dataset.end);
-			
-			            if (isNaN(start) || isNaN(end)) return;
-			
-			            const fractionStart = (start - minYear) / (maxYear - minYear);
-			            const fractionEnd = (end - minYear) / (maxYear - minYear);
-			
-			            const pxStart = fractionStart * headerWidth;
-			            const pxEnd = fractionEnd * headerWidth;
-			
-			            // align with header (which starts after the icon column)
-			            const leftOffset = header.offsetLeft;
-			
-			            bar.style.left = (leftOffset + pxStart) + "px";
-			            bar.style.width = (pxEnd - pxStart) + "px";
-			        });
-			    }
-			
-			    // run on load and on resize
-			    positionBars();
-			    window.addEventListener("resize", positionBars);
-			
-			    // fade/slide bars in when scrolling into view
-			    const observer = new IntersectionObserver(entries => {
-			        entries.forEach(entry => {
-			            if (entry.isIntersecting) {
-			                entry.target.classList.add("visible");
-			            }
-			        });
-			    }, { threshold: 0.2 });
-			
-			    bars.forEach(bar => observer.observe(bar));
-			
-			    // smooth scroll for the whole page
-			    document.documentElement.style.scrollBehavior = "smooth";
-			});
+				document.addEventListener("DOMContentLoaded", function () {
+				    const minYear = 2022;
+				    const maxYear = 2026;
+				
+				    // 👇 timeline is in section #two, not #one
+				    const header = document.querySelector("#two .timeline-header");
+				    const bars   = document.querySelectorAll("#two .timeline-bar");
+				
+				    if (!header || bars.length === 0) return;
+				
+				    function positionBars() {
+				        const headerRect  = header.getBoundingClientRect();
+				        const headerWidth = headerRect.width;
+				
+				        bars.forEach(bar => {
+				            const start = parseFloat(bar.dataset.start);
+				            const end   = parseFloat(bar.dataset.end);
+				            if (isNaN(start) || isNaN(end)) return;
+				
+				            const fractionStart = (start - minYear) / (maxYear - minYear);
+				            const fractionEnd   = (end   - minYear) / (maxYear - minYear);
+				
+				            const pxStart = fractionStart * headerWidth;
+				            const pxEnd   = fractionEnd   * headerWidth;
+				
+				            // line up each bar with the year header row
+				            const row     = bar.parentElement;
+				            const rowRect = row.getBoundingClientRect();
+				            const offset  = headerRect.left - rowRect.left;
+				
+				            bar.style.left  = (offset + pxStart) + "px";
+				            bar.style.width = (pxEnd - pxStart) + "px";
+				        });
+				    }
+				
+				    positionBars();
+				    window.addEventListener("resize", positionBars);
+				
+				    // animate bars when they scroll into view
+				    const observer = new IntersectionObserver(entries => {
+				        entries.forEach(entry => {
+				            if (entry.isIntersecting) {
+				                entry.target.classList.add("visible");
+				            }
+				        });
+				    }, { threshold: 0.2 });
+				
+				    bars.forEach(bar => observer.observe(bar));
+				
+				    // smooth scroll to #three / #four when bars are clicked
+				    document.documentElement.style.scrollBehavior = "smooth";
+				});
 			</script>
+
 	</body>
 
 </html>
+
 
 
 
