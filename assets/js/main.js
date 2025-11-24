@@ -98,7 +98,7 @@
 		// Lightbox gallery.
 			$window.on('load', function() {
 
-				$('#three').poptrox({
+				$('#two').poptrox({
 					caption: function($a) { return $a.next('h3').text(); },
 					overlayColor: '#2c2c2c',
 					overlayOpacity: 0.85,
@@ -114,36 +114,39 @@
 
 			});
 
+
 })(jQuery);
 
-// ---------------------
-// CUSTOM TIMELINE CODE
-// ---------------------
+/* -------------------------------------------------------- */
+/* TIMELINE LOGIC                                           */
+/* -------------------------------------------------------- */
 
 document.addEventListener("DOMContentLoaded", function () {
+	// Year range shown in the header
 	const minYear = 2022;
 	const maxYear = 2026;
+
+	// Today's date for "current" bars (like AHHA)
+	const today = new Date();
+	const todayYear = today.getFullYear();
+	const todayMonth = today.getMonth(); // 0–11
+	const todayFraction = todayMonth / 12; // rough fractional part of year
 
 	const header = document.querySelector("#two .timeline-header");
 	const bars   = document.querySelectorAll("#two .timeline-bar");
 
 	if (!header || bars.length === 0) {
-		// Timeline not on this page, bail out quietly
 		return;
 	}
-
-	// Fractional "current year" for any bar that uses data-end="present"
-	const now = new Date();
-	const presentYear = now.getFullYear() + (now.getMonth() + 1) / 12;
 
 	function positionBars() {
 		const headerRect  = header.getBoundingClientRect();
 		const headerWidth = headerRect.width;
 
-		// Must match icon column width in CSS and header padding-left
-		const iconColumnWidth = 120;
+		// This must match the first column width in CSS (company name + logo)
+		const iconColumnWidth = 160;
 
-		// Width available for year scale
+		// Actual width used for the years (2022–2026) — exclude the icon/name column
 		const timelineWidth = headerWidth - iconColumnWidth;
 
 		bars.forEach(bar => {
@@ -153,21 +156,19 @@ document.addEventListener("DOMContentLoaded", function () {
 			let start = parseFloat(rawStart);
 			let end;
 
-			// Allow "present"/"current"/"now" as a dynamic end
-			if (!rawEnd || rawEnd === "present" || rawEnd === "current" || rawEnd === "now") {
-				end = presentYear;
+			// Allow the string "current" for AHHA
+			if (rawEnd === "current") {
+				end = todayYear + todayFraction;
 			} else {
 				end = parseFloat(rawEnd);
 			}
 
 			if (isNaN(start) || isNaN(end)) return;
 
-			// Clamp to min/max range
-			start = Math.max(minYear, Math.min(start, maxYear));
-			end   = Math.max(minYear, Math.min(end,   maxYear));
+			// Clamp end to maxYear so it never visually goes past the timeline
+			if (end > maxYear) end = maxYear;
 
-			if (end <= start) return;
-
+			// Fractions across the range
 			const fractionStart = (start - minYear) / (maxYear - minYear);
 			const fractionEnd   = (end   - minYear) / (maxYear - minYear);
 
@@ -175,7 +176,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			const pxEnd   = fractionEnd   * timelineWidth;
 
 			bar.style.left  = (iconColumnWidth + pxStart) + "px";
-			bar.style.width = (pxEnd - pxStart) + "px";
+			bar.style.width = Math.max(pxEnd - pxStart, 0) + "px";
 		});
 	}
 
@@ -194,6 +195,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	bars.forEach(bar => observer.observe(bar));
 
-	// Smooth scroll for anchor links (timeline bars link to sections)
+	// Smooth scroll for anchor links
 	document.documentElement.style.scrollBehavior = "smooth";
 });
