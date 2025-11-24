@@ -3221,8 +3221,6 @@ input, select, textarea {
 	}
 
 
-/* RANDOM STUFF 
-
 
 
 
@@ -3234,32 +3232,40 @@ input, select, textarea {
 /* ------------------------------- */
 
 #two .timeline-wrapper {
+    /* EASY RESIZE: adjust these three values */
+    --timeline-icon-col: 120px;      /* width of the icon column */
+    --timeline-bar-height: 14px;     /* height of bars */
+    --timeline-row-gap: 60px;        /* vertical spacing between rows */
+
     width: 100%;
     padding: 40px 0;
     margin-top: 40px;
     position: relative;
 }
 
+/* Years header: auto-filled by JS */
 #two .timeline-header {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    padding-left: 120px; /* space for icons */
+    display: flex;
+    padding-left: var(--timeline-icon-col); /* space for icons */
     font-weight: bold;
     margin-bottom: 35px;
     color: #666;
 }
 
 #two .timeline-header .year {
+    flex: 1;
     text-align: center;
     font-size: 1.2rem;
 }
 
 /* ROW: icon left + bar right */
 #two .company-row {
+    --bar-color: #34a6ff; /* default; JS overwrites per row based on bar color */
+
     display: grid;
-    grid-template-columns: 120px 1fr;
+    grid-template-columns: var(--timeline-icon-col) 1fr;
     align-items: center;
-    margin-bottom: 60px;
+    margin-bottom: var(--timeline-row-gap);
     position: relative;
 }
 
@@ -3269,19 +3275,21 @@ input, select, textarea {
     height: 70px;
     object-fit: cover;
     border-radius: 50%;
-    transition: transform 0.25s ease;
     border: 2px solid #ddd;
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
 }
 
 #two .company-icon:hover {
     transform: scale(1.1);
-    border-color: #888;
 }
 
 /* TIMELINE BAR BASE */
 #two .timeline-bar {
     position: absolute;
-    height: 14px;
+    height: var(--timeline-bar-height);
     background: #34a6ff;
     border-radius: 8px;
     opacity: 0;
@@ -3299,17 +3307,23 @@ input, select, textarea {
     transform: translateY(0);
 }
 
-/* Hover effect */
-#two .timeline-bar:hover {
-    background: #5cb8ff;
-    box-shadow: 0 0 10px rgba(80, 170, 255, 0.7);
+/* Hover effect (row-wide highlight) */
+#two .company-row:hover .timeline-bar {
+    box-shadow: 0 0 14px var(--bar-color);
+}
+
+/* Company icon outline matches bar color on row hover */
+#two .company-row:hover .company-icon {
+    border-color: var(--bar-color);
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
+    transform: scale(1.05);
 }
 
 /* Label bubbles (start + end) */
 #two .timeline-bar::before,
 #two .timeline-bar::after {
     position: absolute;
-    top: -32px;              /* a bit more space above the bar */
+    top: -32px;
     background: #ffffff;
     padding: 3px 8px;
     border-radius: 4px;
@@ -3318,7 +3332,7 @@ input, select, textarea {
     opacity: 0;
     transition: opacity 0.25s ease;
     pointer-events: none;
-    white-space: nowrap;     /* always one line */
+    white-space: nowrap;
 }
 
 /* show labels on hover */
@@ -3331,17 +3345,17 @@ input, select, textarea {
 #two .timeline-bar::before {
     content: attr(data-start-label);
     right: 100%;
-    margin-right: 6px;       /* a few pixels away from bar */
+    margin-right: 6px;
 }
 
 /* END LABEL – slightly outside/right of bar */
 #two .timeline-bar::after {
     content: attr(data-end-label);
     left: 100%;
-    margin-left: 6px;        /* a few pixels away from bar */
+    margin-left: 6px;
 }
 
-/* Optional: custom bar colors */
+/* Custom bar colors */
 #two .bar-ahha { background: #FF8C8C; }
 #two .bar-jace { background: #FFD36E; }
 #two .bar-mta  { background: #6ECFFF; }
@@ -3351,3 +3365,8 @@ input, select, textarea {
 #two .bar-jace:hover { background: #FFE096; }
 #two .bar-mta:hover  { background: #9EDFFF; }
 #two .bar-m1:hover   { background: #BE9CFF; }
+
+
+
+
+
