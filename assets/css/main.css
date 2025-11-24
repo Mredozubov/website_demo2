@@ -3236,7 +3236,7 @@ input, select, textarea {
     /* EASY RESIZE: adjust these three values */
     --timeline-icon-col: 120px;      /* width of the icon column */
     --timeline-bar-height: 18px;     /* height of bars (taller now) */
-    --timeline-row-gap: 30px;        /* vertical spacing between rows (less now) */
+    --timeline-row-gap: 12px;        /* vertical spacing between rows (less now) */
 
     width: 100%;
     padding: 40px 0;
