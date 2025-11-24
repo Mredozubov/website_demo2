@@ -3235,12 +3235,12 @@ input, select, textarea {
 #two .timeline-wrapper {
     /* EASY RESIZE: adjust these three values */
     --timeline-icon-col: 120px;      /* width of the icon column */
-    --timeline-bar-height: 20px;     /* height of bars (taller now) */
-    --timeline-row-gap: 1px;        /* vertical spacing between rows (less now) */
+    --timeline-bar-height: 30px;     /* height of bars (thicker now) */
+    --timeline-row-gap: 30px;        /* vertical spacing between rows (tighter now) */
 
     width: 100%;
-    padding: 20px 0;
-    margin-top: 1px;
+    padding: 40px 0;
+    margin-top: 40px;
     position: relative;
 }
 
@@ -3296,9 +3296,9 @@ input, select, textarea {
         box-shadow 0.25s ease;
 }
 
-/* Company name under logo */
+/* Company name under logo (closer to image) */
 #two .company-name {
-    margin-top: 0.35em;
+    margin-top: 0.15em;
     font-size: 0.9rem;
     color: #666;
     text-align: center;
@@ -3306,8 +3306,8 @@ input, select, textarea {
 
 /* Extra highlight when hovering the logo */
 #two .company-logo:hover .company-icon {
-    transform: scale(1.08);
-    box-shadow: 0 0 14px var(--bar-color);
+    transform: scale(1.1);
+    box-shadow: 0 0 22px var(--bar-color);
 }
 
 /* TIMELINE BAR BASE */
@@ -3331,21 +3331,22 @@ input, select, textarea {
     transform: translateY(0);
 }
 
-/* Hover effect (row-wide highlight) */
+/* Stronger hover effect (row-wide highlight) */
 #two .company-row:hover .timeline-bar {
-    box-shadow: 0 0 14px var(--bar-color);
+    box-shadow: 0 0 26px var(--bar-color);
 }
 
-/* Company icon gets a bit more pop on row hover too */
+/* Company icon gets more pop on row hover */
 #two .company-row:hover .company-icon {
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 20px var(--bar-color);
+    transform: scale(1.08);
 }
 
 /* Label bubbles (start + end) */
 #two .timeline-bar::before,
 #two .timeline-bar::after {
     position: absolute;
-    top: -32px;
+    top: -34px; /* nudged slightly to work with thicker bar */
     background: #ffffff;
     padding: 3px 8px;
     border-radius: 4px;
@@ -3387,6 +3388,4 @@ input, select, textarea {
 #two .bar-jace:hover { background: #FFE096; }
 #two .bar-mta:hover  { background: #9EDFFF; }
 #two .bar-m1:hover   { background: #BE9CFF; }
-
-
 
