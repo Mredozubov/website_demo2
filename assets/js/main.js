@@ -117,84 +117,88 @@
 
 })(jQuery);
 
-/* -------------------------------------------------------- */
-/* TIMELINE LOGIC                                           */
-/* -------------------------------------------------------- */
+
+
+
+
+// RANDOM STUFF - TIMELINE
 
 document.addEventListener("DOMContentLoaded", function () {
-	// Year range shown in the header
-	const minYear = 2022;
-	const maxYear = 2026;
+    const minYear = 2022;
+    const maxYear = 2026;
 
-	// Today's date for "current" bars (like AHHA)
-	const today = new Date();
-	const todayYear = today.getFullYear();
-	const todayMonth = today.getMonth(); // 0–11
-	const todayFraction = todayMonth / 12; // rough fractional part of year
+    // Today's date for "current" jobs like AHHA
+    const today = new Date();
+    const todayYear = today.getFullYear();
+    const todayMonth = today.getMonth(); // 0–11
+    const todayFraction = todayMonth / 12; // simple fractional part of year
 
-	const header = document.querySelector("#two .timeline-header");
-	const bars   = document.querySelectorAll("#two .timeline-bar");
+    const header = document.querySelector("#two .timeline-header");
+    const bars   = document.querySelectorAll("#two .timeline-bar");
 
-	if (!header || bars.length === 0) {
-		return;
-	}
+    if (!header || bars.length === 0) {
+        // Timeline not on this page, bail out quietly
+        return;
+    }
 
-	function positionBars() {
-		const headerRect  = header.getBoundingClientRect();
-		const headerWidth = headerRect.width;
+    function positionBars() {
+        const headerRect  = header.getBoundingClientRect();
+        const headerWidth = headerRect.width;
 
-		// This must match the first column width in CSS (company name + logo)
-		const iconColumnWidth = 160;
+        // This must match the name+icon column width in CSS
+        const iconColumnWidth = 160;
 
-		// Actual width used for the years (2022–2026) — exclude the icon/name column
-		const timelineWidth = headerWidth - iconColumnWidth;
+        // Actual width used for the years (2022–2026) — exclude the name/icon column
+        const timelineWidth = headerWidth - iconColumnWidth;
 
-		bars.forEach(bar => {
-			const rawStart = bar.dataset.start;
-			const rawEnd   = bar.dataset.end;
+        bars.forEach(bar => {
+            const rawStart = bar.dataset.start;
+            const rawEnd   = bar.dataset.end;
 
-			let start = parseFloat(rawStart);
-			let end;
+            let start = parseFloat(rawStart);
+            let end;
 
-			// Allow the string "current" for AHHA
-			if (rawEnd === "current") {
-				end = todayYear + todayFraction;
-			} else {
-				end = parseFloat(rawEnd);
-			}
+            // Allow the string "current" to mean "up to today"
+            if (rawEnd === "current") {
+                end = todayYear + todayFraction;
+            } else {
+                end = parseFloat(rawEnd);
+            }
 
-			if (isNaN(start) || isNaN(end)) return;
+            if (isNaN(start) || isNaN(end)) return;
 
-			// Clamp end to maxYear so it never visually goes past the timeline
-			if (end > maxYear) end = maxYear;
+            // Clamp end so it never visually goes past the axis
+            if (end > maxYear) end = maxYear;
 
-			// Fractions across the range
-			const fractionStart = (start - minYear) / (maxYear - minYear);
-			const fractionEnd   = (end   - minYear) / (maxYear - minYear);
+            // Fractions across the range
+            const fractionStart = (start - minYear) / (maxYear - minYear);
+            const fractionEnd   = (end   - minYear) / (maxYear - minYear);
 
-			const pxStart = fractionStart * timelineWidth;
-			const pxEnd   = fractionEnd   * timelineWidth;
+            const pxStart = fractionStart * timelineWidth;
+            const pxEnd   = fractionEnd   * timelineWidth;
 
-			bar.style.left  = (iconColumnWidth + pxStart) + "px";
-			bar.style.width = Math.max(pxEnd - pxStart, 0) + "px";
-		});
-	}
+            bar.style.left  = (iconColumnWidth + pxStart) + "px";
+            bar.style.width = Math.max(pxEnd - pxStart, 0) + "px";
+        });
+    }
 
-	// Run on load and resize
-	positionBars();
-	window.addEventListener("resize", positionBars);
+    // Run on load and resize
+    positionBars();
+    window.addEventListener("resize", positionBars);
 
-	// Scroll-in animation
-	const observer = new IntersectionObserver(entries => {
-		entries.forEach(entry => {
-			if (entry.isIntersecting) {
-				entry.target.classList.add("visible");
-			}
-		});
-	}, { threshold: 0.2 });
+    // Scroll-in animation (optional; if this fails, bars are still visible now)
+    if (window.IntersectionObserver) {
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("visible");
+                }
+            });
+        }, { threshold: 0.2 });
 
-	bars.forEach(bar => observer.observe(bar));
+        bars.forEach(bar => observer.observe(bar));
+    }
 
-	// Smooth scroll for anchor links
-	document.documentElement.style.scrollBehavior = "smooth";
+    // Smooth scroll for anchor links
+    document.documentElement.style.scrollBehavior = "smooth";
 });
