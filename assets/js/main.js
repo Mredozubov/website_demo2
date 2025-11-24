@@ -118,44 +118,51 @@
 })(jQuery);
 
 // RANDOM STUFF 
-<script>
-// Convert year.start to fractional grid position
-function calculateBarPositions() {
-  const bars = document.querySelectorAll('.timeline-bar');
 
-  bars.forEach(bar => {
-    const start = parseFloat(bar.dataset.start);
-    const end   = parseFloat(bar.dataset.end);
-
+document.addEventListener("DOMContentLoaded", function () {
     const minYear = 2022;
     const maxYear = 2026;
 
-    const totalPixels = bar.parentElement.offsetWidth - 120;
+    const header = document.querySelector("#one .timeline-header");
+    const bars = document.querySelectorAll("#one .timeline-bar");
 
-    const startPos = ((start - minYear) / (maxYear - minYear)) * totalPixels;
-    const endPos   = ((end - minYear) / (maxYear - minYear)) * totalPixels;
+    function positionBars() {
+        if (!header) return;
 
-    bar.style.left = (120 + startPos) + 'px';
-    bar.style.width = (endPos - startPos) + 'px';
-  });
-}
+        const headerRect = header.getBoundingClientRect();
+        const headerWidth = headerRect.width;
 
-window.addEventListener('load', calculateBarPositions);
-window.addEventListener('resize', calculateBarPositions);
+        bars.forEach(bar => {
+            const start = parseFloat(bar.dataset.start);
+            const end = parseFloat(bar.dataset.end);
 
-// Scroll fade-in animations
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
+            if (isNaN(start) || isNaN(end)) return;
+
+            const fractionStart = (start - minYear) / (maxYear - minYear);
+            const fractionEnd = (end - minYear) / (maxYear - minYear);
+
+            const pxStart = fractionStart * headerWidth;
+            const pxEnd = fractionEnd * headerWidth;
+
+            const leftOffset = header.offsetLeft;
+
+            bar.style.left = (leftOffset + pxStart) + "px";
+            bar.style.width = (pxEnd - pxStart) + "px";
+        });
     }
-  });
-}, { threshold: 0.2 });
 
-document.querySelectorAll('.timeline-bar').forEach(bar => {
-  observer.observe(bar);
+    positionBars();
+    window.addEventListener("resize", positionBars);
+
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("visible");
+            }
+        });
+    }, { threshold: 0.2 });
+
+    bars.forEach(bar => observer.observe(bar));
+
+    document.documentElement.style.scrollBehavior = "smooth";
 });
-
-// Smooth scroll behavior
-document.documentElement.style.scrollBehavior = 'smooth';
-</script>
