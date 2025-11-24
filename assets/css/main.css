@@ -3221,97 +3221,130 @@ input, select, textarea {
 	}
 
 
-/* RANDOM STUFF */
-#timeline {
-  padding: 80px 40px;
-  background: #f7f7f7;
+/* RANDOM STUFF 
+
+
+
+
+
+
+
+
+
+
+*/
+/* ==== TIMELINE SECTION ==== */
+
+#one .timeline-wrapper {
+    background: #f7f7f7;
+    padding: 2.5rem 2rem;
+    border-radius: 0.75rem;
+    margin-bottom: 3rem;
 }
 
-.timeline-wrapper {
-  display: grid;
-  grid-template-columns: 120px 1fr;
-  gap: 20px;
+/* Years row */
+#one .timeline-header {
+    margin-left: 120px;              /* space for icons column */
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    column-gap: 1rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    color: #b0b0b0;
 }
 
-.timeline-header {
-  grid-column: 2;
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  margin-bottom: 20px;
+#one .timeline-header .year {
+    text-align: center;
 }
 
-.timeline-header .year {
-  text-align: center;
-  font-weight: 600;
-  opacity: 0.8;
+/* Company row */
+#one .company-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: 80px;
 }
 
-.company-row {
-  display: grid;
-  grid-template-columns: 120px 1fr;
-  align-items: center;
-  height: 80px;
-  position: relative;
+/* Circular company icons */
+#one .company-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 30px;
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.03);
 }
 
-.company-icon {
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  object-fit: cover;
-  cursor: pointer;
-  transition: transform 0.25s ease;
+#one .company-icon:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
 }
 
-.company-icon:hover {
-  transform: scale(1.08);
+/* Timeline bar itself */
+#one .timeline-bar {
+    position: absolute;
+    /* will be set by JS; these are fallbacks */
+    left: 120px;
+    height: 24px;
+    border-radius: 999px;
+    background: #999;
+    cursor: pointer;
+    transition:
+        box-shadow 0.3s ease,
+        filter 0.3s ease,
+        opacity 0.4s ease,
+        transform 0.4s ease;
+    opacity: 0;
+    transform: translateY(20px);
 }
 
-.timeline-bar {
-  position: absolute;
-  height: 24px;
-  left: 120px;
-  border-radius: 12px;
-  transition: box-shadow 0.3s ease, filter 0.3s ease, opacity 0.4s ease;
-  cursor: pointer;
-  opacity: 0;
-  transform: translateY(20px);
+/* Example corporate colors – tweak however you like */
+#one .bar-ahha { background: #003366; }
+#one .bar-jace { background: #0070d9; }
+#one .bar-mta  { background: #009688; }
+#one .bar-m1   { background: #d23b3b; }
+
+/* Glow + date labels on hover */
+#one .timeline-bar:hover {
+    box-shadow: 0 0 14px rgba(0, 0, 0, 0.4);
+    filter: brightness(1.15);
 }
 
-/* Corporate color examples */
-.bar-ahha { background: #003366; }
-.bar-jace { background: #2266cc; }
-.bar-mta  { background: #009688; }
-.bar-m1   { background: #cc3300; }
-
-.timeline-bar:hover {
-  box-shadow: 0 0 12px rgba(0,0,0,0.4);
-  filter: brightness(1.2);
+/* date labels (start/end) */
+#one .timeline-bar::before,
+#one .timeline-bar::after {
+    position: absolute;
+    top: -26px;
+    font-size: 0.75rem;
+    color: #777;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    pointer-events: none;
 }
 
-/* Hover date labels */
-.timeline-bar::before,
-.timeline-bar::after {
-  content: attr(data-start);
-  position: absolute;
-  top: -28px;
-  font-size: 13px;
-  opacity: 0;
-  transition: opacity 0.3s;
+#one .timeline-bar::before {
+    content: attr(data-start-label);
+    left: 0;
 }
 
-.timeline-bar::after {
-  content: attr(data-end);
-  right: 0;
+#one .timeline-bar::after {
+    content: attr(data-end-label);
+    right: 0;
 }
 
-.timeline-bar:hover::before,
-.timeline-bar:hover::after {
-  opacity: 1;
+#one .timeline-bar:hover::before,
+#one .timeline-bar:hover::after {
+    opacity: 1;
 }
 
-/* Animate bars when entering view */
-.timeline-bar.visible {
-  opacity: 1;
-  transform: translateY(0);
+/* animate in when they scroll into view */
+#one .timeline-bar.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
+
+
+
+
