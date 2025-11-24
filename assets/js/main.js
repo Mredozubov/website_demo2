@@ -117,6 +117,7 @@
 
 })(jQuery);
 
+// RANDOM STUFF - TIMELINE
 
 
 // RANDOM STUFF - TIMELINE
@@ -125,84 +126,58 @@ document.addEventListener("DOMContentLoaded", function () {
     const minYear = 2022;
     const maxYear = 2026;
 
-    // Today's date for "current" jobs like AHHA
-    const today = new Date();
-    const todayYearFloat = today.getFullYear() + today.getMonth() / 12;
+    const header = document.querySelector("#two .timeline-header");
+    const bars   = document.querySelectorAll("#two .timeline-bar");
 
-    const rows = document.querySelectorAll("#two .company-row");
-
-    if (!rows.length) {
-        return; // no timeline on this page
+    if (!header || bars.length === 0) {
+        // Timeline not on this page, bail out quietly
+        return;
     }
 
     function positionBars() {
-        rows.forEach(row => {
-            const bar = row.querySelector(".timeline-bar");
-            if (!bar) return;
+        const headerRect  = header.getBoundingClientRect();
+        const headerWidth = headerRect.width;
 
-            const rawStart = bar.dataset.start;
-            const rawEnd   = bar.dataset.end;
+        // This must match the padding-left in CSS AND the icon column width
+        const iconColumnWidth = 120;
 
-            let startYear = parseFloat(rawStart);
-            let endYear;
+        // Actual width used for the years (2022–2026) — exclude the icon space
+        const timelineWidth = headerWidth - iconColumnWidth;
 
-            // Allow the string "current" to mean "up to today"
-            if (rawEnd === "current") {
-                endYear = todayYearFloat;
-            } else {
-                endYear = parseFloat(rawEnd);
-            }
+        bars.forEach(bar => {
+            const start = parseFloat(bar.dataset.start);
+            const end   = parseFloat(bar.dataset.end);
 
-            if (isNaN(startYear) || isNaN(endYear)) return;
+            if (isNaN(start) || isNaN(end)) return;
 
-            // Clamp within [minYear, maxYear] and ensure end >= start
-            if (endYear < startYear) endYear = startYear;
-            if (startYear < minYear) startYear = minYear;
-            if (endYear > maxYear)   endYear   = maxYear;
-
-            // How wide is this entire row?
-            const rowRect = row.getBoundingClientRect();
-            const rowWidth = rowRect.width;
-
-            // This must match the name+icon column width in CSS
-            const iconColumnWidth = 160;
-
-            // The space available for the year timeline inside this row
-            const timelineWidth = rowWidth - iconColumnWidth;
-            if (timelineWidth <= 0) return;
-
-            // Fractions across the range
-            const fractionStart = (startYear - minYear) / (maxYear - minYear);
-            const fractionEnd   = (endYear   - minYear) / (maxYear - minYear);
+            // 0–1 fractions across the range
+            const fractionStart = (start - minYear) / (maxYear - minYear);
+            const fractionEnd   = (end   - minYear) / (maxYear - minYear);
 
             const pxStart = fractionStart * timelineWidth;
             const pxEnd   = fractionEnd   * timelineWidth;
 
-            const left  = iconColumnWidth + pxStart;
-            const width = Math.max(pxEnd - pxStart, 0);
-
-            bar.style.left  = left + "px";
-            bar.style.width = width + "px";
+            // Left edge: icon column + where this bar starts in the year grid
+            bar.style.left  = (iconColumnWidth + pxStart) + "px";
+            bar.style.width = (pxEnd - pxStart) + "px";
         });
     }
 
-    // Initial layout + on resize
+    // Run on load and resize
     positionBars();
     window.addEventListener("resize", positionBars);
 
-    // Optional scroll-in effect: just add .visible when in view
-    if (window.IntersectionObserver) {
-        const observer = new IntersectionObserver(entries => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add("visible");
-                }
-            });
-        }, { threshold: 0.2 });
+    // Scroll-in animation
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("visible");
+            }
+        });
+    }, { threshold: 0.2 });
 
-        document.querySelectorAll("#two .timeline-bar").forEach(bar => observer.observe(bar));
-    }
+    bars.forEach(bar => observer.observe(bar));
 
-    // Smooth scroll for the bar links
+    // Smooth scroll for anchor links
     document.documentElement.style.scrollBehavior = "smooth";
 });
