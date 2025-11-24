@@ -2636,6 +2636,7 @@ body.is-touch .poptrox-popup .closer {
 
 
 
+/* RANDOM STUFF */
 
 /* ------------------------------- */
 /* TIMELINE LAYOUT (SECTION TWO)   */
@@ -2708,17 +2709,16 @@ body.is-touch .poptrox-popup .closer {
     height: 28px;
     background: #34a6ff;
     border-radius: 14px;
-    opacity: 1;                 /* <== make bars visible by default */
-    transform: translateY(0);   /* no hidden offset by default */
+    opacity: 1;                 /* bars visible by default */
+    transform: translateY(0);   /* no hidden offset */
     transition:
         background 0.3s ease,
         box-shadow 0.3s ease;
 }
 
-/* When the bar scrolls into view: we could animate here if we want */
+/* optional “visible” state if the JS adds it */
 #two .timeline-bar.visible {
-    /* keep same transform for now so there’s no flicker
-       but you could do something like transform: translateY(-3px); */
+    /* e.g. transform: translateY(-3px); if you want */
 }
 
 /* Hover effect – bar glows instead of the logo */
