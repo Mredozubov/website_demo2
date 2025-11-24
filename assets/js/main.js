@@ -119,13 +119,15 @@
 
 // RANDOM STUFF - TIMELINE
 
+
+// RANDOM STUFF - TIMELINE
+
 document.addEventListener("DOMContentLoaded", function () {
     const minYear = 2022;
     const maxYear = 2026;
 
     const header = document.querySelector("#two .timeline-header");
-	const bars = document.querySelectorAll("#two .timeline-bar");
-
+    const bars   = document.querySelectorAll("#two .timeline-bar");
 
     if (!header || bars.length === 0) {
         // Timeline not on this page, bail out quietly
@@ -136,8 +138,11 @@ document.addEventListener("DOMContentLoaded", function () {
         const headerRect  = header.getBoundingClientRect();
         const headerWidth = headerRect.width;
 
-        // Width of the icon column (must match CSS)
-        const iconColumnWidth = 120; 
+        // This must match the padding-left in CSS AND the icon column width
+        const iconColumnWidth = 120;
+
+        // Actual width used for the years (2022–2026) — exclude the icon space
+        const timelineWidth = headerWidth - iconColumnWidth;
 
         bars.forEach(bar => {
             const start = parseFloat(bar.dataset.start);
@@ -145,14 +150,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (isNaN(start) || isNaN(end)) return;
 
-            // Convert year+month into a 0–1 fraction across 2022–2026
+            // 0–1 fractions across the range
             const fractionStart = (start - minYear) / (maxYear - minYear);
             const fractionEnd   = (end   - minYear) / (maxYear - minYear);
 
-            const pxStart = fractionStart * headerWidth;
-            const pxEnd   = fractionEnd   * headerWidth;
+            const pxStart = fractionStart * timelineWidth;
+            const pxEnd   = fractionEnd   * timelineWidth;
 
-            // Left edge: icon column + where this bar starts in the header grid
+            // Left edge: icon column + where this bar starts in the year grid
             bar.style.left  = (iconColumnWidth + pxStart) + "px";
             bar.style.width = (pxEnd - pxStart) + "px";
         });
@@ -176,6 +181,3 @@ document.addEventListener("DOMContentLoaded", function () {
     // Smooth scroll for anchor links
     document.documentElement.style.scrollBehavior = "smooth";
 });
-
-
-
