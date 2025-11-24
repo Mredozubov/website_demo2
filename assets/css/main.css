@@ -2697,11 +2697,12 @@ body.is-touch .poptrox-popup .closer {
 /* TIMELINE BAR BASE (twice as thick as original) */
 #two .timeline-bar {
     position: absolute;
-    height: 28px;
+    top: 50%;                  /* vertically center in the row */
+    transform: translateY(-50%);
+    height: 28px;              /* thicker bar */
     background: #34a6ff;
     border-radius: 14px;
-    opacity: 1;                 /* bars visible by default */
-    transform: translateY(0);   /* no hidden offset */
+    opacity: 1;                /* bars visible by default */
     transition:
         background 0.3s ease,
         box-shadow 0.3s ease;
@@ -2709,13 +2710,13 @@ body.is-touch .poptrox-popup .closer {
 
 /* optional “visible” state if the JS adds it */
 #two .timeline-bar.visible {
-    /* e.g. transform: translateY(-3px); if you want */
+    /* you can add extra animation here if you like */
 }
 
 /* Hover effect – bar glows instead of the logo */
 #two .timeline-bar:hover {
     background: #5cb8ff;
-    box-shadow: 0 0 14px rgba(80, 170, 255, 0.8);
+    box-shadow: 0 0 14px rgba(80, 170, 255, 0.8); /* bar glow */
 }
 
 /* Label bubbles (start + end) */
