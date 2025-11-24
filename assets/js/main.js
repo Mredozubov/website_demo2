@@ -138,7 +138,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return isNaN(num) ? null : num;
     }
 
-    // Approximate "today" as year + month fraction (you can refine later if you like)
+    // Approximate "today" as year + month fraction
     const today = new Date();
     const todayYearFraction = today.getFullYear() + (today.getMonth() + 1) / 12;
 
@@ -310,7 +310,3 @@ document.addEventListener("DOMContentLoaded", function () {
     // Smooth scrolling for anchor links (e.g., clicking bars)
     document.documentElement.style.scrollBehavior = "smooth";
 });
-
-
-
-
