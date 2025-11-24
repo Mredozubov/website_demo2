@@ -3309,7 +3309,7 @@ input, select, textarea {
 #two .timeline-bar::before,
 #two .timeline-bar::after {
     position: absolute;
-    top: -28px;
+    top: -32px;              /* a bit more space above the bar */
     background: #ffffff;
     padding: 3px 8px;
     border-radius: 4px;
@@ -3318,25 +3318,27 @@ input, select, textarea {
     opacity: 0;
     transition: opacity 0.25s ease;
     pointer-events: none;
+    white-space: nowrap;     /* always one line */
 }
 
+/* show labels on hover */
 #two .timeline-bar:hover::before,
 #two .timeline-bar:hover::after {
     opacity: 1;
 }
 
-/* START LABEL */
+/* START LABEL – slightly outside/left of bar */
 #two .timeline-bar::before {
     content: attr(data-start-label);
-    left: 0;
-    transform: translateX(-20%);
+    right: 100%;
+    margin-right: 6px;       /* a few pixels away from bar */
 }
 
-/* END LABEL */
+/* END LABEL – slightly outside/right of bar */
 #two .timeline-bar::after {
     content: attr(data-end-label);
-    right: 0;
-    transform: translateX(20%);
+    left: 100%;
+    margin-left: 6px;        /* a few pixels away from bar */
 }
 
 /* Optional: custom bar colors */
