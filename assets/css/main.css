@@ -3235,12 +3235,12 @@ input, select, textarea {
 #two .timeline-wrapper {
     /* EASY RESIZE: adjust these three values */
     --timeline-icon-col: 120px;      /* width of the icon column */
-    --timeline-bar-height: 18px;     /* height of bars (taller now) */
-    --timeline-row-gap: 12px;        /* vertical spacing between rows (less now) */
+    --timeline-bar-height: 20px;     /* height of bars (taller now) */
+    --timeline-row-gap: 1px;        /* vertical spacing between rows (less now) */
 
     width: 100%;
     padding: 40px 0;
-    margin-top: 40px;
+    margin-top: 20px;
     position: relative;
 }
 
