@@ -3229,122 +3229,123 @@ input, select, textarea {
 
 
 
+/* ------------------------------- */
+/* TIMELINE LAYOUT (SECTION TWO)   */
+/* ------------------------------- */
 
-
-
-*/
-/* ==== TIMELINE SECTION ==== */
-
-#one .timeline-wrapper {
-    background: #f7f7f7;
-    padding: 2.5rem 2rem;
-    border-radius: 0.75rem;
-    margin-bottom: 3rem;
+#two .timeline-wrapper {
+    width: 100%;
+    padding: 40px 0;
+    margin-top: 40px;
+    position: relative;
 }
 
-/* Years row */
-#one .timeline-header {
-    margin-left: 120px;              /* space for icons column */
+#two .timeline-header {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    column-gap: 1rem;
-    margin-bottom: 1.5rem;
-    font-weight: 600;
-    color: #b0b0b0;
+    padding-left: 120px; /* space for icons */
+    font-weight: bold;
+    margin-bottom: 35px;
+    color: #666;
 }
 
-#one .timeline-header .year {
+#two .timeline-header .year {
     text-align: center;
+    font-size: 1.2rem;
 }
 
-/* Company row */
-#one .company-row {
-    position: relative;
-    display: flex;
+/* ROW: icon left + bar right */
+#two .company-row {
+    display: grid;
+    grid-template-columns: 120px 1fr;
     align-items: center;
-    min-height: 80px;
+    margin-bottom: 60px;
+    position: relative;
 }
 
-/* Circular company icons */
-#one .company-icon {
+/* COMPANY ICON */
+#two .company-icon {
     width: 70px;
     height: 70px;
-    border-radius: 50%;
     object-fit: cover;
-    margin-right: 30px;
-    cursor: pointer;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-    box-shadow: 0 0 0 2px rgba(0,0,0,0.03);
+    border-radius: 50%;
+    transition: transform 0.25s ease;
+    border: 2px solid #ddd;
 }
 
-#one .company-icon:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+#two .company-icon:hover {
+    transform: scale(1.1);
+    border-color: #888;
 }
 
-/* Timeline bar itself */
-#one .timeline-bar {
+/* TIMELINE BAR BASE */
+#two .timeline-bar {
     position: absolute;
-    /* will be set by JS; these are fallbacks */
-    left: 120px;
-    height: 24px;
-    border-radius: 999px;
-    background: #999;
-    cursor: pointer;
-    transition:
-        box-shadow 0.3s ease,
-        filter 0.3s ease,
-        opacity 0.4s ease,
-        transform 0.4s ease;
+    height: 14px;
+    background: #34a6ff;
+    border-radius: 8px;
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(15px);
+    transition:
+        opacity 0.6s ease,
+        transform 0.6s ease,
+        background 0.3s ease,
+        box-shadow 0.3s ease;
 }
 
-/* Example corporate colors – tweak however you like */
-#one .bar-ahha { background: #003366; }
-#one .bar-jace { background: #0070d9; }
-#one .bar-mta  { background: #009688; }
-#one .bar-m1   { background: #d23b3b; }
-
-/* Glow + date labels on hover */
-#one .timeline-bar:hover {
-    box-shadow: 0 0 14px rgba(0, 0, 0, 0.4);
-    filter: brightness(1.15);
+/* When the bar scrolls into view */
+#two .timeline-bar.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
-/* date labels (start/end) */
-#one .timeline-bar::before,
-#one .timeline-bar::after {
+/* Hover effect */
+#two .timeline-bar:hover {
+    background: #5cb8ff;
+    box-shadow: 0 0 10px rgba(80, 170, 255, 0.7);
+}
+
+/* Label bubbles (start + end) */
+#two .timeline-bar::before,
+#two .timeline-bar::after {
     position: absolute;
-    top: -26px;
+    top: -28px;
+    background: #ffffff;
+    padding: 3px 8px;
+    border-radius: 4px;
     font-size: 0.75rem;
-    color: #777;
+    border: 1px solid #ccc;
     opacity: 0;
     transition: opacity 0.25s ease;
     pointer-events: none;
 }
 
-#one .timeline-bar::before {
+#two .timeline-bar:hover::before,
+#two .timeline-bar:hover::after {
+    opacity: 1;
+}
+
+/* START LABEL */
+#two .timeline-bar::before {
     content: attr(data-start-label);
     left: 0;
+    transform: translateX(-20%);
 }
 
-#one .timeline-bar::after {
+/* END LABEL */
+#two .timeline-bar::after {
     content: attr(data-end-label);
     right: 0;
+    transform: translateX(20%);
 }
 
-#one .timeline-bar:hover::before,
-#one .timeline-bar:hover::after {
-    opacity: 1;
-}
+/* Optional: custom bar colors */
+#two .bar-ahha { background: #FF8C8C; }
+#two .bar-jace { background: #FFD36E; }
+#two .bar-mta  { background: #6ECFFF; }
+#two .bar-m1   { background: #9B6EFF; }
 
-/* animate in when they scroll into view */
-#one .timeline-bar.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-
-
-
+#two .bar-ahha:hover { background: #FFB1B1; }
+#two .bar-jace:hover { background: #FFE096; }
+#two .bar-mta:hover  { background: #9EDFFF; }
+#two .bar-m1:hover   { background: #BE9CFF; }
