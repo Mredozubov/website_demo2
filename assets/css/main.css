@@ -3227,6 +3227,7 @@ input, select, textarea {
 
 
 
+
 /* ------------------------------- */
 /* TIMELINE LAYOUT (SECTION TWO)   */
 /* ------------------------------- */
@@ -3234,13 +3235,18 @@ input, select, textarea {
 #two .timeline-wrapper {
     /* EASY RESIZE: adjust these three values */
     --timeline-icon-col: 120px;      /* width of the icon column */
-    --timeline-bar-height: 14px;     /* height of bars */
-    --timeline-row-gap: 60px;        /* vertical spacing between rows */
+    --timeline-bar-height: 18px;     /* height of bars (taller now) */
+    --timeline-row-gap: 40px;        /* vertical spacing between rows (less now) */
 
     width: 100%;
     padding: 40px 0;
     margin-top: 40px;
     position: relative;
+}
+
+/* Remove dotted underline from logo links */
+#two .company-row a {
+    border-bottom: none;
 }
 
 /* Years header: auto-filled by JS */
@@ -3269,21 +3275,39 @@ input, select, textarea {
     position: relative;
 }
 
+/* Logo + name vertical stack */
+#two .company-logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
 /* COMPANY ICON */
 #two .company-icon {
     width: 70px;
     height: 70px;
     object-fit: cover;
     border-radius: 50%;
-    border: 2px solid #ddd;
+    border: 3px solid var(--bar-color); /* always match bar color */
     transition:
         transform 0.25s ease,
         border-color 0.25s ease,
         box-shadow 0.25s ease;
 }
 
-#two .company-icon:hover {
-    transform: scale(1.1);
+/* Company name under logo */
+#two .company-name {
+    margin-top: 0.35em;
+    font-size: 0.9rem;
+    color: #666;
+    text-align: center;
+}
+
+/* Extra highlight when hovering the logo */
+#two .company-logo:hover .company-icon {
+    transform: scale(1.08);
+    box-shadow: 0 0 14px var(--bar-color);
 }
 
 /* TIMELINE BAR BASE */
@@ -3312,11 +3336,9 @@ input, select, textarea {
     box-shadow: 0 0 14px var(--bar-color);
 }
 
-/* Company icon outline matches bar color on row hover */
+/* Company icon gets a bit more pop on row hover too */
 #two .company-row:hover .company-icon {
-    border-color: var(--bar-color);
-    box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
-    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
 /* Label bubbles (start + end) */
@@ -3365,8 +3387,6 @@ input, select, textarea {
 #two .bar-jace:hover { background: #FFE096; }
 #two .bar-mta:hover  { background: #9EDFFF; }
 #two .bar-m1:hover   { background: #BE9CFF; }
-
-
 
 
 
