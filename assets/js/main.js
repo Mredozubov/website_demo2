@@ -117,43 +117,51 @@
 
 })(jQuery);
 
-// RANDOM STUFF 
+// RANDOM STUFF - TIMELINE
 
 document.addEventListener("DOMContentLoaded", function () {
     const minYear = 2022;
     const maxYear = 2026;
 
     const header = document.querySelector("#one .timeline-header");
-    const bars = document.querySelectorAll("#one .timeline-bar");
+    const bars   = document.querySelectorAll("#one .timeline-bar");
+
+    if (!header || bars.length === 0) {
+        // Timeline not on this page, bail out quietly
+        return;
+    }
 
     function positionBars() {
-        if (!header) return;
-
-        const headerRect = header.getBoundingClientRect();
+        const headerRect  = header.getBoundingClientRect();
         const headerWidth = headerRect.width;
+
+        // Width of the icon column (must match CSS)
+        const iconColumnWidth = 120; 
 
         bars.forEach(bar => {
             const start = parseFloat(bar.dataset.start);
-            const end = parseFloat(bar.dataset.end);
+            const end   = parseFloat(bar.dataset.end);
 
             if (isNaN(start) || isNaN(end)) return;
 
+            // Convert year+month into a 0–1 fraction across 2022–2026
             const fractionStart = (start - minYear) / (maxYear - minYear);
-            const fractionEnd = (end - minYear) / (maxYear - minYear);
+            const fractionEnd   = (end   - minYear) / (maxYear - minYear);
 
             const pxStart = fractionStart * headerWidth;
-            const pxEnd = fractionEnd * headerWidth;
+            const pxEnd   = fractionEnd   * headerWidth;
 
-            const leftOffset = header.offsetLeft;
-
-            bar.style.left = (leftOffset + pxStart) + "px";
+            // Left edge: icon column + where this bar starts in the header grid
+            bar.style.left  = (iconColumnWidth + pxStart) + "px";
             bar.style.width = (pxEnd - pxStart) + "px";
         });
     }
 
+    // Run on load and resize
     positionBars();
     window.addEventListener("resize", positionBars);
 
+    // Scroll-in animation
     const observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -164,5 +172,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     bars.forEach(bar => observer.observe(bar));
 
+    // Smooth scroll for anchor links
     document.documentElement.style.scrollBehavior = "smooth";
 });
+
+
