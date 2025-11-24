@@ -2624,138 +2624,138 @@ body.is-touch .poptrox-popup .closer {
 
 }
 
-/* Medium breakpoint-specific header/footer/main already defined above */
 
-/* ------------------------------- */
-/* TIMELINE LAYOUT (SECTION TWO)   */
-/* ------------------------------- */
+
+/* RANDOM STUFF – TIMELINE
+   -------------------------------------------------------------- */
+
+/* TIMELINE LAYOUT (SECTION TWO) */
 
 #two .timeline-wrapper {
-	width: 100%;
-	padding: 40px 0;
-	margin-top: 40px;
-	position: relative;
+    width: 100%;
+    padding: 40px 0;
+    margin-top: 40px;
+    position: relative;
 }
 
 #two .timeline-header {
-	display: grid;
-	grid-template-columns: repeat(5, 1fr);
-	padding-left: 120px; /* space for icons */
-	font-weight: bold;
-	margin-bottom: 35px;
-	color: #666;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    padding-left: 160px; /* space for company name + logo */
+    font-weight: bold;
+    margin-bottom: 35px;
+    color: #666;
 }
 
 #two .timeline-header .year {
-	text-align: center;
-	font-size: 1.2rem;
+    text-align: center;
+    font-size: 1.2rem;
 }
 
-/* ROW: icon left + bar right */
+/* ROW: left column = name + icon, right = bar */
 #two .company-row {
-	display: grid;
-	grid-template-columns: 120px 1fr;
-	align-items: center;
-	margin-bottom: 60px;
-	position: relative;
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    align-items: center;
+    margin-bottom: 35px;  /* tighter spacing between rows */
+    position: relative;
 }
 
-/* company name + icon stacked */
+/* name + logo container */
 #two .company-info {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	gap: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
 }
 
+/* company name above the logo – single line */
 #two .company-name {
-	font-size: 0.8rem;
-	font-weight: 600;
-	color: #555;
-	text-align: center;
+    font-size: 0.85rem;
+    color: #555;
+    white-space: nowrap;
 }
 
 /* COMPANY ICON */
 #two .company-icon {
-	width: 70px;
-	height: 70px;
-	object-fit: cover;
-	border-radius: 50%;
-	transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-	border: 2px solid #ddd;
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid #ddd;
+    transition: border-color 0.25s ease;
 }
 
-#two .company-icon:hover {
-	transform: scale(1.1);
-}
+/* colored rings that match the bars (no glow) */
+#two .company-icon-ahha { border-color: #FF8C8C; }
+#two .company-icon-jace { border-color: #FFD36E; }
+#two .company-icon-mta  { border-color: #6ECFFF; }
+#two .company-icon-m1   { border-color: #9B6EFF; }
 
-/* TIMELINE BAR BASE */
+/* TIMELINE BAR BASE (twice as thick as before) */
 #two .timeline-bar {
-	position: absolute;
-	top: 50%;
-	height: 14px;
-	background: #34a6ff;
-	border-radius: 8px;
-	opacity: 0;
-	transform: translateY(15px);
-	transition:
-		opacity 0.6s ease,
-		transform 0.6s ease,
-		background 0.3s ease,
-		box-shadow 0.3s ease;
+    position: absolute;
+    height: 28px;                 /* was 14px */
+    background: #34a6ff;
+    border-radius: 14px;
+    opacity: 0;
+    transform: translateY(15px);
+    transition:
+        opacity 0.6s ease,
+        transform 0.6s ease,
+        background 0.3s ease,
+        box-shadow 0.3s ease;
 }
 
 /* When the bar scrolls into view */
 #two .timeline-bar.visible {
-	opacity: 1;
-	transform: translateY(0);
+    opacity: 1;
+    transform: translateY(0);
 }
 
-/* Hover effect */
+/* Hover effect – bar glows instead of the logo */
 #two .timeline-bar:hover {
-	background: #5cb8ff;
-	box-shadow: 0 0 10px rgba(80, 170, 255, 0.7);
+    background: #5cb8ff;
+    box-shadow: 0 0 14px rgba(80, 170, 255, 0.8);
 }
 
 /* Label bubbles (start + end) */
 #two .timeline-bar::before,
 #two .timeline-bar::after {
-	position: absolute;
-	top: -30px;
-	background: #ffffff;
-	padding: 3px 8px;
-	border-radius: 4px;
-	font-size: 0.75rem;
-	border: 1px solid #ccc;
-	opacity: 0;
-	transition: opacity 0.25s ease;
-	pointer-events: none;
-	white-space: nowrap; /* always one line */
-	display: inline-block;
+    position: absolute;
+    top: -36px;              /* space above the thicker bar */
+    background: #ffffff;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    border: 1px solid #ccc;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    pointer-events: none;
+    white-space: nowrap;     /* always one line of text */
 }
 
 /* show labels on hover */
 #two .timeline-bar:hover::before,
 #two .timeline-bar:hover::after {
-	opacity: 1;
+    opacity: 1;
 }
 
-/* START LABEL – slightly outside/left of bar */
+/* START LABEL – a few pixels to the left of the bar */
 #two .timeline-bar::before {
-	content: attr(data-start-label);
-	right: 100%;
-	margin-right: 8px; /* a few pixels away from bar */
+    content: attr(data-start-label);
+    right: 100%;
+    margin-right: 8px;       /* small gap from bar edge */
 }
 
-/* END LABEL – slightly outside/right of bar */
+/* END LABEL – a few pixels to the right of the bar */
 #two .timeline-bar::after {
-	content: attr(data-end-label);
-	left: 100%;
-	margin-left: 8px; /* a few pixels away from bar */
+    content: attr(data-end-label);
+    left: 100%;
+    margin-left: 8px;        /* small gap from bar edge */
 }
 
-/* Specific bar colors */
+/* Custom bar colors per job */
 #two .bar-ahha { background: #FF8C8C; }
 #two .bar-jace { background: #FFD36E; }
 #two .bar-mta  { background: #6ECFFF; }
@@ -2765,41 +2765,3 @@ body.is-touch .poptrox-popup .closer {
 #two .bar-jace:hover { background: #FFE096; }
 #two .bar-mta:hover  { background: #9EDFFF; }
 #two .bar-m1:hover   { background: #BE9CFF; }
-
-/* Icon highlight by bar color */
-#two .company-row.company-ahha .company-icon {
-	border-color: #FF8C8C;
-	box-shadow: 0 0 0 4px rgba(255, 140, 140, 0.35);
-}
-
-#two .company-row.company-jace .company-icon {
-	border-color: #FFD36E;
-	box-shadow: 0 0 0 4px rgba(255, 211, 110, 0.35);
-}
-
-#two .company-row.company-mta .company-icon {
-	border-color: #6ECFFF;
-	box-shadow: 0 0 0 4px rgba(110, 207, 255, 0.35);
-}
-
-#two .company-row.company-m1 .company-icon {
-	border-color: #9B6EFF;
-	box-shadow: 0 0 0 4px rgba(155, 110, 255, 0.35);
-}
-
-/* Stronger glow on row hover */
-#two .company-row.company-ahha:hover .company-icon {
-	box-shadow: 0 0 0 6px rgba(255, 140, 140, 0.6);
-}
-
-#two .company-row.company-jace:hover .company-icon {
-	box-shadow: 0 0 0 6px rgba(255, 211, 110, 0.6);
-}
-
-#two .company-row.company-mta:hover .company-icon {
-	box-shadow: 0 0 0 6px rgba(110, 207, 255, 0.6);
-}
-
-#two .company-row.company-m1:hover .company-icon {
-	box-shadow: 0 0 0 6px rgba(155, 110, 255, 0.6);
-}
