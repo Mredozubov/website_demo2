@@ -38,13 +38,15 @@
 					
 					<!-- AHHA -->
 					<div class="company-row">
-					  <a href="https://github.com/Mredozubov" target="_blank">
+						<a href="https://github.com/Mredozubov" target="_blank">
 						<img src="images/timeline/AHHA_image1.png" class="company-icon" alt="AHHA">
-					  </a>
+						</a>
 					
-					  <a href="#three" class="timeline-bar bar-ahha"
-						 data-start="2023.8" data-end="2026">
-					  </a>
+					  <!-- AHHA -->
+						<a href="#four" class="timeline-bar bar-ahha"
+						   data-start="2023.8" data-end="2026"
+						   data-start-label="Oct. 2023" data-end-label="Present">
+						</a>
 					</div>
 					
 					<!-- Jace -->
@@ -53,9 +55,11 @@
 						<img src="images/timeline/AHHA_image1.png" class="company-icon" alt="Jace">
 					  </a>
 					
-					  <a href="#two" class="timeline-bar bar-jace"
-						 data-start="2024.25" data-end="2025.4">
-					  </a>
+					  <!-- Jace -->
+						<a href="#three" class="timeline-bar bar-jace"
+						   data-start="2024.25" data-end="2025.4"
+						   data-start-label="Mar. 2024" data-end-label="May 2025">
+						</a>
 					</div>
 					
 					<!-- MTA -->
@@ -64,9 +68,12 @@
 						<img src="images/timeline/AHHA_image1.png" class="company-icon" alt="MTA">
 					  </a>
 					
-					  <a href="#two" class="timeline-bar bar-mta"
-						 data-start="2024.5" data-end="2024.7">
-					  </a>
+					 <!-- MTA -->
+						<a href="#three" class="timeline-bar bar-mta"
+						   data-start="2024.5" data-end="2024.7"
+						   data-start-label="Jun. 2024" data-end-label="Aug. 2024">
+						</a>
+			
 					</div>
 					
 					<!-- Mobil1 -->
@@ -75,9 +82,11 @@
 						<img src="images/timeline/AHHA_image1.png" class="company-icon" alt="M1">
 					  </a>
 					
-					  <a href="#three" class="timeline-bar bar-m1"
-						 data-start="2025.5" data-end="2025.75">
-					  </a>
+						<!-- Mobil1 -->
+						<a href="#four" class="timeline-bar bar-m1"
+						   data-start="2025.5" data-end="2025.75"
+						   data-start-label="Jun. 2025" data-end-label="Sep. 2025">
+						</a>
 					</div>
 					
 					</div>
@@ -565,10 +574,63 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
-
+			<script>
+			document.addEventListener("DOMContentLoaded", function () {
+			    const minYear = 2022;
+			    const maxYear = 2026;
+			
+			    const header = document.querySelector("#one .timeline-header");
+			    const bars = document.querySelectorAll("#one .timeline-bar");
+			
+			    function positionBars() {
+			        if (!header) return;
+			
+			        const headerRect = header.getBoundingClientRect();
+			        const headerWidth = headerRect.width;
+			
+			        bars.forEach(bar => {
+			            const start = parseFloat(bar.dataset.start);
+			            const end = parseFloat(bar.dataset.end);
+			
+			            if (isNaN(start) || isNaN(end)) return;
+			
+			            const fractionStart = (start - minYear) / (maxYear - minYear);
+			            const fractionEnd = (end - minYear) / (maxYear - minYear);
+			
+			            const pxStart = fractionStart * headerWidth;
+			            const pxEnd = fractionEnd * headerWidth;
+			
+			            // align with header (which starts after the icon column)
+			            const leftOffset = header.offsetLeft;
+			
+			            bar.style.left = (leftOffset + pxStart) + "px";
+			            bar.style.width = (pxEnd - pxStart) + "px";
+			        });
+			    }
+			
+			    // run on load and on resize
+			    positionBars();
+			    window.addEventListener("resize", positionBars);
+			
+			    // fade/slide bars in when scrolling into view
+			    const observer = new IntersectionObserver(entries => {
+			        entries.forEach(entry => {
+			            if (entry.isIntersecting) {
+			                entry.target.classList.add("visible");
+			            }
+			        });
+			    }, { threshold: 0.2 });
+			
+			    bars.forEach(bar => observer.observe(bar));
+			
+			    // smooth scroll for the whole page
+			    document.documentElement.style.scrollBehavior = "smooth";
+			});
+			</script>
 	</body>
 
 </html>
+
 
 
 
