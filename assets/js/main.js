@@ -189,24 +189,24 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!isNaN(overrideMin)) minYear = overrideMin;
     if (!isNaN(overrideMax)) maxYear = overrideMax;
 
-    // Second pass: assign bar internal values
+    // Second pass: assign bar internal values, clamped to [minYear, maxYear]
     barInfo.forEach(info => {
         const bar = info.bar;
 
         bar._startVal = info.startVal;
 
-        // Base layout end:
-        //  - For live "present" bars: extend to the full maxYear by default
-        //  - On hover we'll pull it back to today's date
+        let baseEnd;
         if (info.isLiveEnd) {
-            bar._baseEndVal = maxYear;
+            baseEnd = maxYear; // base layout ends at maxYear
             bar.dataset.liveEnd = "true";
         } else {
-            bar._baseEndVal = info.endValForRange;
+            baseEnd = info.endValForRange;
         }
 
-        // Current end value used for actual positioning (changes on hover for live bars)
-        bar._currentEndVal = bar._baseEndVal;
+        // Clamp base end into [minYear, maxYear]
+        baseEnd = Math.max(minYear, Math.min(baseEnd, maxYear));
+        bar._baseEndVal = baseEnd;
+        bar._currentEndVal = baseEnd;
     });
 
     // Build the year header dynamically
@@ -270,7 +270,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Live-end bars (e.g., AHHA with data-end="present"):
-    // On row hover, snap bar to "today"; on mouse out, restore base (maxYear).
+    // On row hover, snap bar to "today" (but not past maxYear); on mouse out, restore base.
     rows.forEach(row => {
         const bar = row.querySelector(".timeline-bar");
         if (!bar) return;
@@ -281,7 +281,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!isLive) return;
 
         row.addEventListener("mouseenter", function () {
-            bar._currentEndVal = todayYearFraction;
+            bar._currentEndVal = Math.min(todayYearFraction, maxYear);
             positionBars();
         });
 
