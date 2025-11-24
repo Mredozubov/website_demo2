@@ -2626,10 +2626,20 @@ body.is-touch .poptrox-popup .closer {
 
 
 
-/* RANDOM STUFF – TIMELINE
-   -------------------------------------------------------------- */
 
-/* TIMELINE LAYOUT (SECTION TWO) */
+
+
+
+
+/* RANDOM STUFF 
+
+
+
+
+
+/* ------------------------------- */
+/* TIMELINE LAYOUT (SECTION TWO)   */
+/* ------------------------------- */
 
 #two .timeline-wrapper {
     width: 100%;
@@ -2692,25 +2702,23 @@ body.is-touch .poptrox-popup .closer {
 #two .company-icon-mta  { border-color: #6ECFFF; }
 #two .company-icon-m1   { border-color: #9B6EFF; }
 
-/* TIMELINE BAR BASE (twice as thick as before) */
+/* TIMELINE BAR BASE (twice as thick as original) */
 #two .timeline-bar {
     position: absolute;
-    height: 28px;                 /* was 14px */
+    height: 28px;
     background: #34a6ff;
     border-radius: 14px;
-    opacity: 0;
-    transform: translateY(15px);
+    opacity: 1;                 /* <== make bars visible by default */
+    transform: translateY(0);   /* no hidden offset by default */
     transition:
-        opacity 0.6s ease,
-        transform 0.6s ease,
         background 0.3s ease,
         box-shadow 0.3s ease;
 }
 
-/* When the bar scrolls into view */
+/* When the bar scrolls into view: we could animate here if we want */
 #two .timeline-bar.visible {
-    opacity: 1;
-    transform: translateY(0);
+    /* keep same transform for now so there’s no flicker
+       but you could do something like transform: translateY(-3px); */
 }
 
 /* Hover effect – bar glows instead of the logo */
