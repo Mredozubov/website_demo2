@@ -114,4 +114,48 @@
 
 			});
 
+
 })(jQuery);
+
+// RANDOM STUFF 
+<script>
+// Convert year.start to fractional grid position
+function calculateBarPositions() {
+  const bars = document.querySelectorAll('.timeline-bar');
+
+  bars.forEach(bar => {
+    const start = parseFloat(bar.dataset.start);
+    const end   = parseFloat(bar.dataset.end);
+
+    const minYear = 2022;
+    const maxYear = 2026;
+
+    const totalPixels = bar.parentElement.offsetWidth - 120;
+
+    const startPos = ((start - minYear) / (maxYear - minYear)) * totalPixels;
+    const endPos   = ((end - minYear) / (maxYear - minYear)) * totalPixels;
+
+    bar.style.left = (120 + startPos) + 'px';
+    bar.style.width = (endPos - startPos) + 'px';
+  });
+}
+
+window.addEventListener('load', calculateBarPositions);
+window.addEventListener('resize', calculateBarPositions);
+
+// Scroll fade-in animations
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.2 });
+
+document.querySelectorAll('.timeline-bar').forEach(bar => {
+  observer.observe(bar);
+});
+
+// Smooth scroll behavior
+document.documentElement.style.scrollBehavior = 'smooth';
+</script>
