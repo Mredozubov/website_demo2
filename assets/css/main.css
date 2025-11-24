@@ -3219,3 +3219,99 @@ input, select, textarea {
 			}
 
 	}
+
+
+/* RANDOM STUFF */
+#timeline {
+  padding: 80px 40px;
+  background: #f7f7f7;
+}
+
+.timeline-wrapper {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 20px;
+}
+
+.timeline-header {
+  grid-column: 2;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  margin-bottom: 20px;
+}
+
+.timeline-header .year {
+  text-align: center;
+  font-weight: 600;
+  opacity: 0.8;
+}
+
+.company-row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  align-items: center;
+  height: 80px;
+  position: relative;
+}
+
+.company-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.25s ease;
+}
+
+.company-icon:hover {
+  transform: scale(1.08);
+}
+
+.timeline-bar {
+  position: absolute;
+  height: 24px;
+  left: 120px;
+  border-radius: 12px;
+  transition: box-shadow 0.3s ease, filter 0.3s ease, opacity 0.4s ease;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* Corporate color examples */
+.bar-ahha { background: #003366; }
+.bar-jace { background: #2266cc; }
+.bar-mta  { background: #009688; }
+.bar-m1   { background: #cc3300; }
+
+.timeline-bar:hover {
+  box-shadow: 0 0 12px rgba(0,0,0,0.4);
+  filter: brightness(1.2);
+}
+
+/* Hover date labels */
+.timeline-bar::before,
+.timeline-bar::after {
+  content: attr(data-start);
+  position: absolute;
+  top: -28px;
+  font-size: 13px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.timeline-bar::after {
+  content: attr(data-end);
+  right: 0;
+}
+
+.timeline-bar:hover::before,
+.timeline-bar:hover::after {
+  opacity: 1;
+}
+
+/* Animate bars when entering view */
+.timeline-bar.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
