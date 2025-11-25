@@ -129,8 +129,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (!header || bars.length === 0) return;
 
-    // Parse data-start / data-end values
-    function parseYearValue(raw) {
+    // Approximate "today" as year + month fraction
+    const today = new Date();
+    const todayYearFraction = today.getFullYear() + (today.getMonth() + 1) / 12;
+
+    // Helpers
+    function getYearFractionFromAttrs(bar, prefix) {
+        const yearAttr  = bar.dataset[prefix + "Year"];
+        if (!yearAttr) return null;
+        let year = parseInt(yearAttr, 10);
+        if (isNaN(year)) return null;
+
+        let monthAttr = bar.dataset[prefix + "Month"];
+        let month = monthAttr ? parseInt(monthAttr, 10) : 1;
+        if (isNaN(month) || month < 1 || month > 12) month = 1;
+
+        return year + (month - 1) / 12;
+    }
+
+    function parseDecimalYear(raw) {
         if (!raw) return null;
         const v = String(raw).trim().toLowerCase();
         if (v === "present" || v === "now" || v === "current") return "present";
@@ -138,43 +155,57 @@ document.addEventListener("DOMContentLoaded", function () {
         return isNaN(num) ? null : num;
     }
 
-    // Approximate "today" as year + month fraction
-    const today = new Date();
-    const todayYearFraction = today.getFullYear() + (today.getMonth() + 1) / 12;
-
     // First pass: collect ranges & min/max
     let foundMin = Infinity;
     let foundMax = -Infinity;
     const barInfo = [];
 
     bars.forEach(bar => {
-        const rawStart = parseYearValue(bar.dataset.start);
-        const rawEnd   = parseYearValue(bar.dataset.end);
-
-        if (rawStart === null) return;
-
-        const isLiveEnd = (rawEnd === "present");
-        const startVal  = (rawStart === "present") ? todayYearFraction : rawStart;
-
-        let endValForRange;
-        if (isLiveEnd) {
-            // For range detection, live end is "today"
-            endValForRange = todayYearFraction;
-        } else if (rawEnd === null) {
-            endValForRange = startVal;
-        } else {
-            endValForRange = rawEnd;
+        // START
+        let startVal = getYearFractionFromAttrs(bar, "start");
+        if (startVal === null) {
+            const decStart = parseDecimalYear(bar.dataset.start);
+            if (decStart === null || decStart === "present") return;
+            startVal = decStart;
         }
+
+        // END
+        let isLiveEnd = false;
+        let endVal;
+
+        const endAttr = bar.dataset.end;
+        if (endAttr && /present|now|current/i.test(endAttr)) {
+            isLiveEnd = true;
+            endVal = todayYearFraction;
+        } else {
+            let endValFromAttrs = getYearFractionFromAttrs(bar, "end");
+            if (endValFromAttrs !== null) {
+                endVal = endValFromAttrs;
+            } else {
+                const decEnd = parseDecimalYear(bar.dataset.end);
+                if (decEnd === "present") {
+                    isLiveEnd = true;
+                    endVal = todayYearFraction;
+                } else if (decEnd === null) {
+                    endVal = startVal; // zero-length if no end given
+                } else {
+                    endVal = decEnd;
+                }
+            }
+        }
+
+        // Clamp raw end to "today" so no bar can go past current date
+        endVal = Math.min(endVal, todayYearFraction);
 
         barInfo.push({
             bar,
             startVal,
-            endValForRange,
+            endValForRange: endVal,
             isLiveEnd
         });
 
         if (startVal < foundMin) foundMin = startVal;
-        if (endValForRange > foundMax) foundMax = endValForRange;
+        if (endVal > foundMax)   foundMax = endVal;
     });
 
     if (!isFinite(foundMin) || !isFinite(foundMax)) return;
@@ -193,20 +224,15 @@ document.addEventListener("DOMContentLoaded", function () {
     barInfo.forEach(info => {
         const bar = info.bar;
 
-        bar._startVal = info.startVal;
+        let start = info.startVal;
+        let end   = info.endValForRange;
 
-        let baseEnd;
-        if (info.isLiveEnd) {
-            baseEnd = maxYear; // base layout ends at maxYear
-            bar.dataset.liveEnd = "true";
-        } else {
-            baseEnd = info.endValForRange;
-        }
+        start = Math.max(minYear, Math.min(start, maxYear));
+        end   = Math.max(minYear, Math.min(end,   maxYear));
 
-        // Clamp base end into [minYear, maxYear]
-        baseEnd = Math.max(minYear, Math.min(baseEnd, maxYear));
-        bar._baseEndVal = baseEnd;
-        bar._currentEndVal = baseEnd;
+        bar._startVal      = start;
+        bar._baseEndVal    = end;
+        bar._currentEndVal = end;
     });
 
     // Build the year header dynamically
@@ -234,13 +260,15 @@ document.addEventListener("DOMContentLoaded", function () {
         const iconColWidth = getNumberFromCSS(timelineWrapper, "--timeline-icon-col", 120);
         const timelineWidth = Math.max(0, headerWidth - iconColWidth);
 
+        const span = maxYear - minYear || 1; // avoid divide-by-zero
+
         bars.forEach(bar => {
             const start = bar._startVal;
             const end   = bar._currentEndVal;
             if (typeof start !== "number" || typeof end !== "number") return;
 
-            const fractionStart = (start - minYear) / (maxYear - minYear);
-            const fractionEnd   = (end   - minYear) / (maxYear - minYear);
+            const fractionStart = (start - minYear) / span;
+            const fractionEnd   = (end   - minYear) / span;
 
             const pxStart = fractionStart * timelineWidth;
             const pxEnd   = fractionEnd   * timelineWidth;
@@ -267,28 +295,6 @@ document.addEventListener("DOMContentLoaded", function () {
         if (bgColor) {
             row.style.setProperty("--bar-color", bgColor);
         }
-    });
-
-    // Live-end bars (e.g., AHHA with data-end="present"):
-    // On row hover, snap bar to "today" (but not past maxYear); on mouse out, restore base.
-    rows.forEach(row => {
-        const bar = row.querySelector(".timeline-bar");
-        if (!bar) return;
-
-        const endAttr = bar.dataset.end ? bar.dataset.end.toLowerCase() : "";
-        const isLive  = (endAttr === "present" || endAttr === "now" || endAttr === "current");
-
-        if (!isLive) return;
-
-        row.addEventListener("mouseenter", function () {
-            bar._currentEndVal = Math.min(todayYearFraction, maxYear);
-            positionBars();
-        });
-
-        row.addEventListener("mouseleave", function () {
-            bar._currentEndVal = bar._baseEndVal;
-            positionBars();
-        });
     });
 
     // Initial layout + on resize
